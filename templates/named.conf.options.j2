@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+options {
+	directory "/var/cache/bind";
+
+	dnssec-enable yes;
+	dnssec-validation yes;
+	dnssec-lookaside auto;
+
+	auth-nxdomain no;    # conform to RFC1035
+	listen-on { any; };
+	listen-on-v6 { none; };
+
+	version none;
+};

@@ -1,0 +1,88 @@
+- name: install packages for bind9
+  apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - bind9
+    - bind9-host
+    - cron
+  tags: bind
+
+- name: create zone directory
+  file:
+    path: /etc/bind/zones
+    owner: bind
+    group: bind
+    mode: 0700
+    state: directory
+  tags: bind
+
+- name: create log directory
+  file:
+    path: /var/log/named
+    owner: bind
+    group: bind
+    mode: 0700
+    state: directory
+  tags: bind
+
+- name: copy bind configuration files
+  template:
+    src: '{{ item }}.j2'
+    dest: '/etc/bind/{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - named.conf
+    - named.conf.options
+    - named.conf.local
+  notify: restart bind
+  tags: bind
+
+- name: create keys directory
+  file:
+    path: /etc/bind/keys
+    owner: root
+    group: bind
+    mode: 0750
+    state: directory
+  tags: bind
+
+- include: keys.yml
+  when: bind_role == 'master'
+
+- name: copy zone files
+  template:
+    src: db.j2
+    dest: '/etc/bind/zones/db.{{ item.key }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: '{{ bind_zones }}'
+  register: zone
+  notify: restart bind
+  tags: bind
+
+- name: dnssec sign
+  shell: 'cd /etc/bind/keys && dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ item.item.key }} -t /etc/bind/zones/db.{{ item.item.key }}'
+  with_items: '{{ zone.results }}'
+  when: item.changed and item.item.value.dnssec is defined and item.item.value.dnssec
+  notify: restart bind
+  tags: bind
+
+- name: add cron dnssec
+  template:
+    src: dnssec.j2
+    dest: /etc/cron.weekly/dnssec
+    owner: root
+    group: root
+    mode: 0700
+  tags: bind
+
+- name: enable and start bind9
+  service:
+    name: bind9
+    enabled: yes
+    state: started
+  tags: bind

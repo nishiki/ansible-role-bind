@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+include "/etc/bind/named.conf.options";
+include "/etc/bind/named.conf.default-zones";
+include "/etc/bind/named.conf.local";
+
+logging {
+    channel security_file {
+        file "/var/log/named/security.log" versions 3 size 30m;
+        severity dynamic;
+        print-time yes;
+    };
+    category security {
+        security_file;
+    };
+};

@@ -1,0 +1,12 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+cd /etc/bind/keys
+
+{% for zone, value in bind_zones.iteritems() %}
+{% if 'dnssec' in value and value.dnssec %}
+dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ zone }} -t /etc/bind/zones/db.{{ zone }}
+{% endif %}
+{% endfor %}
+
+systemctl restart bind9

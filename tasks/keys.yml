@@ -1,0 +1,99 @@
+- name: check if key has been generated
+  stat:
+    path: '/etc/bind/keys/{{ item.key }}-ksk.key'
+  with_dict: '{{ bind_zones }}'
+  when: item.value.dnssec is defined and item.value.dnssec
+  register: st
+  tags: bind
+
+- name: generated keys for dnssec 1/2
+  shell: 'dnssec-keygen -a RSASHA256 -b 2048 -r /dev/urandom -n ZONE {{ item.item.key }}'
+  args:
+    chdir: /tmp
+  with_items: '{{ st.results }}'
+  when: item.stat is defined and not item.stat.exists
+  register: stdout
+  tags: bind
+
+- name: move key file 1/2
+  copy:
+    remote_src: true
+    src: '/tmp/{{ item[0].stdout }}.{{ item[1] }}'
+    dest: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
+    owner: root
+    group: bind
+    mode: 0640
+  with_nested:
+    - '{{ stdout.results }}'
+    - ['key', 'private']
+  when: not item[0].skipped is defined
+  tags: bind
+
+- name: link key file 1/2
+  file:
+    src: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
+    dest: '/etc/bind/keys/{{ item[0].item.item.key }}.{{ item[1] }}'
+    owner: root
+    group: root
+    state: link
+  with_nested:
+    - '{{ stdout.results }}'
+    - ['key', 'private']
+  when: not item[0].skipped is defined
+  tags: bind
+
+- name: remove old key file 1/2
+  file:
+    path: '{{ item[0].stdout }}.{{ item[1] }}'
+    state: absent
+  with_nested:
+    - '{{ stdout.results }}'
+    - ['key', 'private']
+  when: not item[0].skipped is defined
+  tags: bind
+
+- name: generated keys for dnssec 2/2
+  shell: 'dnssec-keygen -f KSK -a RSASHA256 -b 4096 -r /dev/urandom -n ZONE {{ item.item.key }}'
+  args:
+    chdir: /tmp
+  with_items: '{{ st.results }}'
+  when: item.stat is defined and not item.stat.exists
+  register: stdout
+  tags: bind
+
+- name: move key file 2/2
+  copy:
+    remote_src: true
+    src: '/tmp/{{ item[0].stdout }}.{{ item[1] }}'
+    dest: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
+    owner: root
+    group: bind
+    mode: 0640
+  with_nested:
+    - '{{ stdout.results }}'
+    - ['key', 'private']
+  when: not item[0].skipped is defined
+  tags: bind
+
+- name: link key file 2/2
+  file:
+    src: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
+    dest: '/etc/bind/keys/{{ item[0].item.item.key }}-ksk.{{ item[1] }}'
+    owner: root
+    group: root
+    state: link
+  with_nested:
+    - '{{ stdout.results }}'
+    - ['key', 'private']
+  when: not item[0].skipped is defined
+  tags: bind
+
+- name: remove old key file 2/2
+  file:
+    path: '{{ item[0].stdout }}.{{ item[1] }}'
+    state: absent
+  with_nested:
+    - '{{ stdout.results }}'
+    - ['key', 'private']
+  when: not item[0].skipped is defined
+  tags: bind

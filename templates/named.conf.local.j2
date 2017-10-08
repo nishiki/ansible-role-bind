@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+{% for zone, value in bind_zones.iteritems() %}
+
+zone "{{ zone }}" IN {
+	type master;
+{% if 'dnssec' in value and value.dnssec %}
+	file "/etc/bind/zones/db.{{ zone }}.signed";
+{% else %}
+	file "/etc/bind/zones/db.{{ zone }}";
+{% endif %}
+	allow-transfer { 217.70.177.40; };
+};
+{% endfor %}

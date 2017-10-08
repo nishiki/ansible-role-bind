@@ -1,0 +1,38 @@
+
+AllCops:
+  Exclude:
+    - db/**/*
+    - config/**/*
+    - Vagrantfile
+  TargetRubyVersion: 2.3
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Lint/RescueWithoutErrorClass:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+
+Style/NumericLiteralPrefix:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/CommandLiteral:
+  Enabled: true
+  EnforcedStyle: percent_x
+Style/Documentation:
+  Enabled: false
