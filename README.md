@@ -45,5 +45,7 @@ None
 ### Tests with docker
 
   * install [docker](https://docs.docker.com/engine/installation/)
+  * install ruby
+  * install bundler `gem install bundler`
   * install dependencies `bundle install`
   * run the tests `rake`
