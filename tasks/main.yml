@@ -61,14 +61,14 @@
     mode: 0644
   with_dict: '{{ bind_zones }}'
   register: zone
-  notify: restart bind
+  notify: reload bind
   tags: bind
 
 - name: dnssec sign
   shell: 'cd /etc/bind/keys && dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ item.item.key }} -t /etc/bind/zones/db.{{ item.item.key }}'
   with_items: '{{ zone.results }}'
   when: item.changed and item.item.value.dnssec is defined and item.item.value.dnssec
-  notify: restart bind
+  notify: reload bind
   tags: bind
 
 - name: add cron dnssec
