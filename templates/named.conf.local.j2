@@ -8,6 +8,12 @@ zone "{{ zone }}" IN {
 {% else %}
 	file "/etc/bind/zones/db.{{ zone }}";
 {% endif %}
-	allow-transfer { 217.70.177.40; };
+{% if 'allow_transfer' in value and value.dnssec %}
+	allow-transfer {
+{% for ip in value.allow_transfer %}
+    {{ ip }};
+{% endfor %}
+  };
+{% endif %}
 };
 {% endfor %}

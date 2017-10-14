@@ -24,6 +24,14 @@ end
   end
 end
 
+describe file('/etc/bind/named.conf.local') do
+  it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  it { should contain '4.2.2.4' }
+end
+
 describe command('host hello.test.local 127.0.0.1') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should contain('1.2.3.4') }

@@ -4,6 +4,8 @@
     bind_role: master
     bind_zones:
       test.local:
+        allow_transfer:
+          - '4.2.2.4'
         ns_primary: ns1.test.local
         mail: root@test.local
         serial: 2017092202
