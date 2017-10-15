@@ -1,0 +1,3 @@
+---
+bind_listen_ipv4: true
+bind_listen_ipv6: true

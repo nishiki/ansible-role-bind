@@ -13,6 +13,8 @@ None
 
  * `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
  * `bind_zones` - the dns zones
+ * `bind_listen_ipv4` - enable or disable ip v4 support (default: true)
+ * `bind_listen_ipv6` - enable or disable ip v6 support (default: true)
 
 ## How to use
 

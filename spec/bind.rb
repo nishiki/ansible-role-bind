@@ -32,6 +32,15 @@ describe file('/etc/bind/named.conf.local') do
   it { should contain '4.2.2.4' }
 end
 
+describe file('/etc/bind/named.conf.options') do
+  it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+  it { should contain 'listen-on { any; };' }
+  it { should contain 'listen-on-v6 { none; };' }
+end
+
 describe port(53) do
   it { should be_listening.with('tcp') }
   it { should be_listening.with('udp') }

@@ -8,8 +8,8 @@ options {
 	dnssec-lookaside auto;
 
 	auth-nxdomain no;    # conform to RFC1035
-	listen-on { any; };
-	listen-on-v6 { none; };
+	listen-on { {% if bind_listen_ipv4 %}any{% else %}none{% endif %}; };
+	listen-on-v6 { {% if bind_listen_ipv6 %}any{% else %}none{% endif %}; };
 
 	version none;
 };
