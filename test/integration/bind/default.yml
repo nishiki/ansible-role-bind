@@ -32,5 +32,4 @@
           - { name: hello, type: a, value: 4.3.2.1 }
 
   roles:
-      - bind
-
+      - ansible-role-bind

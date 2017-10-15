@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 group :development do
-  gem 'rake'
+  gem 'kitchen-ansible'
+  gem 'kitchen-docker_cli'
   gem 'rubocop', '0.50.0'
-  gem 'serverspec'
+  gem 'test-kitchen'
 end

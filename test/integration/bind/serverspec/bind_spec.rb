@@ -41,6 +41,11 @@ describe file('/etc/bind/named.conf.options') do
   it { should contain 'listen-on-v6 { none; };' }
 end
 
+describe service('bind9') do
+  it { should be_enabled }
+  it { should be_running.under('systemd') }
+end
+
 describe port(53) do
   it { should be_listening.with('tcp') }
   it { should be_listening.with('udp') }

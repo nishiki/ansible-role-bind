@@ -1,0 +1,36 @@
+driver:
+  name: docker_cli
+
+transport:
+  name: docker_cli
+
+provisioner:
+  name: ansible_playbook
+  hosts: localhost
+#  roles_path: .
+  require_ansible_repo: false
+  require_ansible_omnibus: true
+  require_chef_for_busser: true
+  ansible_verbose: false
+  ansible_version: latest
+  ansible_inventory: ./test/integration/inventory
+
+platforms:
+  - name: debian-9
+    driver_config:
+      image: nishiki/ansible:stretch
+      command: /bin/systemd
+      volume:
+        - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      security_opt: seccomp=unconfined
+
+#verifier:
+#  name: serverspec
+#  bundler_path: '/usr/local/bin'
+#  rspec_path: '/usr/local/bin'
+#
+suites:
+  - name: bind
+#    verifier:
+#      patterns:
+#        - tests/spec/*.rb

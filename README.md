@@ -67,7 +67,7 @@ bind_zones:
   * install ruby
   * install bundler `gem install bundler`
   * install dependencies `bundle install`
-  * run the tests `rake`
+  * run the tests `kitchen test`
 
 ## License
 
