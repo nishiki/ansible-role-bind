@@ -7,7 +7,6 @@ transport:
 provisioner:
   name: ansible_playbook
   hosts: localhost
-#  roles_path: .
   require_ansible_repo: false
   require_ansible_omnibus: true
   require_chef_for_busser: true
@@ -24,13 +23,5 @@ platforms:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
       security_opt: seccomp=unconfined
 
-#verifier:
-#  name: serverspec
-#  bundler_path: '/usr/local/bin'
-#  rspec_path: '/usr/local/bin'
-#
 suites:
   - name: bind
-#    verifier:
-#      patterns:
-#        - tests/spec/*.rb
