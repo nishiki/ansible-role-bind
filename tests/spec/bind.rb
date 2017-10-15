@@ -55,3 +55,8 @@ describe command('host hello.hello.local 127.0.0.1') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should contain('4.3.2.1') }
 end
+
+describe command('host -t TXT hello.local 127.0.0.1') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should contain('hello.local descriptive text') }
+end
