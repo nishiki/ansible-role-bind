@@ -18,27 +18,44 @@ None
 
 ## How to use
 
+ * `host_vars/dns-master`
+ ```
+ bind_role: master
+ ```
+
+ * `host_vars/dns-slave`
+ ```
+ bind_role: slave
+ ```
+
+ * `group_vars/dns-server`
+ ```
+bind_listen_ipv6: true
+bind_listen_ipv4: true
+
+bind_zones:
+  test.local:
+    ns_primary: ns1.test.local
+    mail: root@test.local
+    serial: 2017092202
+    dnssec: yes
+    entries:
+      - { name: '@', type: ns, value: localhost. }
+      - { name: hello, type: a, value: 1.2.3.4 }
+  hello.local:
+    ns_primary: ns1.hello.local
+    mail: root@hello.local
+    serial: 2017092201
+    dnssec: no
+    entries:
+      - { name: '@', type: ns, value: localhost. }
+      - { name: hello, type: a, value: 4.3.2.1 }
+ ```
+
+ * playbook
+
 ```
 - hosts: dns-server
-  vars:
-    bind_role: master
-    bind_zones:
-      test.local:
-        ns_primary: ns1.test.local
-        mail: root@test.local
-        serial: 2017092202
-        dnssec: yes
-        entries:
-          - { name: '@', type: ns, value: localhost. }
-          - { name: hello, type: a, value: 1.2.3.4 }
-      hello.local:
-        ns_primary: ns1.hello.local
-        mail: root@hello.local
-        serial: 2017092201
-        dnssec: no
-        entries:
-          - { name: '@', type: ns, value: localhost. }
-          - { name: hello, type: a, value: 4.3.2.1 }
   roles:
     - bind 
 ```
