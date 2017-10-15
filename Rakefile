@@ -22,10 +22,5 @@ task verify: %w[
 task :install do
   exec_cmd("ansible-playbook -i tests/inventory tests/#{ansible_role}.yml")
   exec_cmd("ansible-playbook -i tests/inventory tests/#{ansible_role}.yml | grep changed=0")
-  exec_cmd("cd spec && rspec #{ansible_role}.rb")
+  exec_cmd("cd tests/spec && rspec #{ansible_role}.rb")
 end
-
- #task :purge do
- #  exec_cmd('ansible-playbook -i tests/inventory tests/purge.yml')
- #  exec_cmd('cd spec && rspec purge.rb')
- #end
