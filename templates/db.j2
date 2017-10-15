@@ -2,18 +2,18 @@
 
 $TTL    {{ item.value.ttl|default(3600) }}
 @       IN      SOA    {{ item.value.ns_primary }}. {{ item.value.mail|replace('@', '.') }}. (
-{{ item.value.serial }} ; Serial
-{{ item.value.refresh|default(14400) }} ; Refresh
-{{ item.value.retry|default(86400) }} ; Retry
-{{ item.value.expire|default(2419200) }} ; Expire
-{{ item.value.negative_cache|default(86400) }} ; Negative Cache TTL
+  {{ item.value.serial }} ; Serial
+  {{ item.value.refresh|default(14400) }} ; Refresh
+  {{ item.value.retry|default(86400) }} ; Retry
+  {{ item.value.expire|default(2419200) }} ; Expire
+  {{ item.value.negative_cache|default(86400) }} ; Negative Cache TTL
 )
 
 {% for entry in item.value.entries %}
 {% if entry.type|upper == 'MX' %}
 {{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN MX {{ entry.priority }}     {{ entry.value }}
 {% elif entry.type|upper == 'TXT' %}
-{{ entry.name }} IN  {{ entry.type|upper }}  (
+{{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN  {{ entry.type|upper }}  (
 {% for charset in entry.value|batch(64) %}
   "{{ charset|join('') }}"
 {% endfor %}
