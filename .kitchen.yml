@@ -11,7 +11,7 @@ provisioner:
   require_ansible_omnibus: true
   require_chef_for_busser: true
   ansible_verbose: false
-  ansible_version: latest
+  ansible_version: <%= ENV['ANSIBLE_VERSION'] %>
   ansible_inventory: ./test/integration/inventory
 
 platforms:

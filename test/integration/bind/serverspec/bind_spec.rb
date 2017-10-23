@@ -2,6 +2,11 @@ require 'serverspec'
 
 set :backend, :exec
 
+puts
+puts "================================"
+puts %x(ansible --version)
+puts "================================"
+
 %w[
   bind9
   cron
