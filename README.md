@@ -41,7 +41,7 @@ bind_zones:
     dnssec: yes
     entries:
       - { name: '@', type: ns, value: localhost. }
-      - { name: hello, type: a, value: 1.2.3.4 }
+      - { name: hello, type: a, ttl: 5m, value: 1.2.3.4 }
   hello.local:
     ns_primary: ns1.hello.local
     mail: root@hello.local

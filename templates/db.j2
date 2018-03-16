@@ -11,15 +11,15 @@ $TTL    {{ item.value.ttl|default(3600) }}
 
 {% for entry in item.value.entries %}
 {% if entry.type|upper == 'MX' %}
-{{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN MX {{ entry.priority }}     {{ entry.value }}
+{{ entry.name }} {{ entry.ttl|default(' ') }} IN MX {{ entry.priority }} {{ entry.value }}
 {% elif entry.type|upper == 'TXT' %}
-{{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN  {{ entry.type|upper }}  (
+{{ entry.name }} {{ entry.ttl|default(' ') }} IN {{ entry.type|upper }}  (
 {% for charset in entry.value|batch(64) %}
   "{{ charset|join('') }}"
 {% endfor %}
 )
 {% else %}
-{{ entry.name }}{% for i in range(0, 15 - entry.name|length) %} {% endfor %} IN {{ entry.type|upper }}{% for i in range(0, 9 - entry.type|length) %} {% endfor %} {{ entry.value }}
+{{ entry.name }} {{ entry.ttl|default(' ') }} IN {{ entry.type|upper }} {{ entry.value }}
 {% endif %}
 {% endfor %}
 {% if 'dnssec' in item.value and item.value.dnssec %}
