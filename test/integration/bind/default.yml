@@ -32,4 +32,8 @@
           - { name: hello, type: a, value: 4.3.2.1 }
 
   roles:
-      - ansible-role-bind
+    - ansible-role-bind
+
+  tasks:
+    - apt:
+        name: dnsutils

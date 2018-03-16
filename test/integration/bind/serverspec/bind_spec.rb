@@ -3,9 +3,9 @@ require 'serverspec'
 set :backend, :exec
 
 puts
-puts "================================"
+puts '================================'
 puts %x(ansible --version)
-puts "================================"
+puts '================================'
 
 %w[
   bind9
@@ -56,17 +56,22 @@ describe port(53) do
   it { should be_listening.with('udp') }
 end
 
-describe command('host hello.test.local 127.0.0.1') do
+describe command('dig +nocmd +noall +answer hello.test.local @127.0.0.1') do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should contain('1.2.3.4') }
+  its(:stdout) { should contain(/hello\.test\.local\.\s+300\s+IN\s+A\s+1\.2\.3\.4/) }
 end
 
-describe command('host hello.hello.local 127.0.0.1') do
+describe command('dig +nocmd +noall +answer -t mx test.local @127.0.0.1') do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should contain('4.3.2.1') }
+  its(:stdout) { should contain(/test\.local\.\s+3600\s+IN\s+MX\s+20 mail\.test\.local\./) }
 end
 
-describe command('host -t TXT hello.local 127.0.0.1') do
+describe command('dig +nocmd +noall +answer hello.hello.local @127.0.0.1') do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should contain('hello.local descriptive text') }
+  its(:stdout) { should contain(/hello\.hello\.local\.\s+3600\s+IN\s+A\s+4\.3\.2\.1/) }
+end
+
+describe command('dig +nocmd +noall +answer -t txt hello.local @127.0.0.1') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should contain('"0L4M99yv8ZLptmS2GP6goHXZgTdFIyYCdfziQgoENcloUI3KshDscsoh6H6I2LA"') }
 end
