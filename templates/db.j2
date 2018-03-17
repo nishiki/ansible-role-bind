@@ -13,7 +13,7 @@ $TTL    {{ item.value.ttl|default(3600) }}
 {% if entry.type|upper == 'MX' %}
 {{ entry.name }} {{ entry.ttl|default(' ') }} IN MX {{ entry.priority }} {{ entry.value }}
 {% elif entry.type|upper == 'TXT' %}
-{{ entry.name }} {{ entry.ttl|default(' ') }} IN {{ entry.type|upper }}  (
+{{ entry.name }} {{ entry.ttl|default(' ') }} IN TXT (
 {% for charset in entry.value|batch(64) %}
   "{{ charset|join('') }}"
 {% endfor %}
