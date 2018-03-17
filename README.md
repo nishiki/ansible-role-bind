@@ -7,28 +7,36 @@ Install and configure bind with dnssec
 
 ## Requirements
 
-None
+ * bind version >= 9.8
+
+## Official support OS
+
+* Debian
+  * stretch
+  * jessie
+
+This role can work on Debian derived OS, but it's not our priority.
 
 ## Role variables
 
- * `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
- * `bind_zones` - the dns zones
- * `bind_listen_ipv4` - enable or disable ip v4 support (default: true)
- * `bind_listen_ipv6` - enable or disable ip v6 support (default: true)
+* `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
+* `bind_zones` - the dns zones
+* `bind_listen_ipv4` - enable or disable ip v4 support (default: true)
+* `bind_listen_ipv6` - enable or disable ip v6 support (default: true)
 
 ## How to use
 
- * `host_vars/dns-master`
+* `host_vars/dns-master`
  ```
  bind_role: master
  ```
 
- * `host_vars/dns-slave`
+* `host_vars/dns-slave`
  ```
  bind_role: slave
  ```
 
- * `group_vars/dns-server`
+* `group_vars/dns-server`
  ```
 bind_listen_ipv6: true
 bind_listen_ipv4: true
@@ -57,7 +65,7 @@ bind_zones:
       - { name: hello, type: a, value: 4.3.2.1 }
  ```
 
- * playbook
+* playbook
 
 ```
 - hosts: dns-server
@@ -68,11 +76,11 @@ bind_zones:
 ## Development
 ### Tests with docker
 
-  * install [docker](https://docs.docker.com/engine/installation/)
-  * install ruby
-  * install bundler `gem install bundler`
-  * install dependencies `bundle install`
-  * run the tests `kitchen test`
+* install [docker](https://docs.docker.com/engine/installation/)
+* install ruby
+* install bundler `gem install bundler`
+* install dependencies `bundle install`
+* run the tests `kitchen test`
 
 ## License
 
