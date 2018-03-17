@@ -39,7 +39,7 @@ bind_zones:
     mail: root@test.local
     serial: 2017092202
     dnssec: yes
-    entries:
+    records:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, ttl: 5m, value: 1.2.3.4 }
       - { name: hello, type: caa, flag: 0, tag: issue, value: letsencrypt.org }
@@ -48,7 +48,7 @@ bind_zones:
     mail: root@hello.local
     serial: 2017092201
     dnssec: no
-    entries:
+    records:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, value: 4.3.2.1 }
  ```
