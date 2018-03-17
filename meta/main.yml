@@ -2,7 +2,7 @@ galaxy_info:
   author: Adrien Waksberg
   description: Install and configure bind9 with dnssec
   license: Apache2
-  min_ansible_version: 2.0
+  min_ansible_version: 2.2
 
   platforms:
     - name: Debian
@@ -13,5 +13,6 @@ galaxy_info:
   galaxy_tags:
     - bind
     - dns
+    - dnssec
 
 dependencies: []
