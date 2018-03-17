@@ -20,6 +20,8 @@
           - { name: '@', type: mx, priority: 20, value: mail.test.local. }
           - { name: '@', type: ns, value: localhost. }
           - { name: hello, type: a, ttl: 5m, value: 1.2.3.4 }
+          - { name: hello, type: caa, flag: 0, tag: issue, value: letsencrypt.org }
+          - { name: hello, type: caa, flag: 0, tag: iodef, value: 'mailto:root@test.local' }
       hello.local:
         ns_primary: ns1.hello.local
         mail: root@hello.local

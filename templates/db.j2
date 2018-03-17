@@ -12,6 +12,8 @@ $TTL    {{ item.value.ttl|default(3600) }}
 {% for entry in item.value.entries %}
 {% if entry.type|upper == 'MX' %}
 {{ entry.name }} {{ entry.ttl|default(' ') }} IN MX {{ entry.priority }} {{ entry.value }}
+{% elif entry.type|upper == 'CAA' %}
+{{ entry.name }} {{ entry.ttl|default(' ') }} CAA {{ entry.flag }} {{ entry.tag }} "{{ entry.value }}"
 {% elif entry.type|upper == 'TXT' %}
 {{ entry.name }} {{ entry.ttl|default(' ') }} IN TXT (
 {% for charset in entry.value|batch(64) %}
