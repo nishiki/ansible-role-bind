@@ -56,9 +56,10 @@ describe port(53) do
   it { should be_listening.with('udp') }
 end
 
-describe command('dig +nocmd +noall +answer hello.test.local @127.0.0.1') do
+describe command('dig +nocmd +noall +answer +dnssec hello.test.local @127.0.0.1') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should contain(/hello\.test\.local\.\s+300\s+IN\s+A\s+1\.2\.3\.4/) }
+  its(:stdout) { should contain(/hello\.test\.local\.\s+300\s+IN\s+RRSIG\s+A /) }
 end
 
 describe command('dig +nocmd +noall +answer -t mx test.local @127.0.0.1') do
