@@ -48,6 +48,10 @@ bind_zones:
     mail: root@hello.local
     serial: 2017092201
     dnssec: no
+    options:
+      key-directory: '"/etc/bind/keys"'
+      auto-dnssec: maintain
+      inline-signing: yes
     records:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, value: 4.3.2.1 }

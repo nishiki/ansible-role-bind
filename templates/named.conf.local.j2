@@ -15,5 +15,10 @@ zone "{{ zone }}" IN {
 {% endfor %}
   };
 {% endif %}
+{% if 'options' in value %}
+{% for option,  opt_value in value.options.iteritems() %}
+  {{ option }} {% if opt_value == True %}yes{% elif opt_value == False %}no{% else %}{{ opt_value }}{% endif %};
+{% endfor %}
+{% endif %}
 };
 {% endfor %}

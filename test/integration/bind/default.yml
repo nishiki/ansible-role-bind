@@ -16,6 +16,10 @@
         expire: 2419200
         negative_cache: 86400
         dnssec: yes
+        options:
+          auto-dnssec: maintain
+          inline-signing: yes
+          key-directory: '"/etc/bind/keys"'
         records:
           - { name: '@', type: mx, priority: 20, value: mail.test.local. }
           - { name: '@', type: ns, value: localhost. }

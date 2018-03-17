@@ -35,6 +35,7 @@ describe file('/etc/bind/named.conf.local') do
   it { should be_owned_by 'root' }
   it { should be_grouped_into 'root' }
   it { should contain '4.2.2.4' }
+  it { should contain 'inline-signing yes;' }
 end
 
 describe file('/etc/bind/named.conf.options') do
