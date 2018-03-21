@@ -11,5 +11,9 @@ options {
   listen-on { {% if bind_listen_ipv4 %}any{% else %}none{% endif %}; };
   listen-on-v6 { {% if bind_listen_ipv6 %}any{% else %}none{% endif %}; };
 
+{% for option,  value in bind_options.iteritems() %}
+  {{ option }} {% if value == True %}yes{% elif value == False %}no{% else %}{{ value }}{% endif %};
+{% endfor %}
+
   version none;
 };

@@ -20,6 +20,7 @@ This role can work on Debian derived OS, but it's not our priority.
 ## Role variables
 
 * `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
+* `bind_options` - hash general bind options
 * `bind_zones` - the dns zones
 * `bind_listen_ipv4` - enable or disable ip v4 support (default: true)
 * `bind_listen_ipv6` - enable or disable ip v6 support (default: true)
@@ -40,6 +41,8 @@ This role can work on Debian derived OS, but it's not our priority.
  ```
 bind_listen_ipv6: true
 bind_listen_ipv4: true
+bind_options:
+  server-id: '"1"'
 
 bind_zones:
   test.local:
@@ -47,6 +50,10 @@ bind_zones:
     mail: root@test.local
     serial: 2017092202
     dnssec: yes
+    options:
+      key-directory: '"/etc/bind/keys"'
+      auto-dnssec: maintain
+      inline-signing: yes
     records:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, ttl: 5m, value: 1.2.3.4 }
@@ -56,10 +63,6 @@ bind_zones:
     mail: root@hello.local
     serial: 2017092201
     dnssec: no
-    options:
-      key-directory: '"/etc/bind/keys"'
-      auto-dnssec: maintain
-      inline-signing: yes
     records:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, value: 4.3.2.1 }

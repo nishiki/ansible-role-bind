@@ -45,6 +45,7 @@ describe file('/etc/bind/named.conf.options') do
   it { should be_grouped_into 'root' }
   it { should contain 'listen-on { any; };' }
   it { should contain 'listen-on-v6 { none; };' }
+  it { should contain 'server-id "1";' }
 end
 
 describe service('bind9') do

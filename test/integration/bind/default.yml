@@ -3,6 +3,8 @@
   vars:
     bind_listen_ipv6: false
     bind_role: master
+    bind_options:
+      server-id: '"1"'
     bind_zones:
       test.local:
         allow_transfer:
