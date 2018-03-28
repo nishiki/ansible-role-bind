@@ -4,7 +4,6 @@
   with_dict: '{{ bind_zones }}'
   when: item.value.dnssec is defined and item.value.dnssec
   register: st
-  tags: bind
 
 - name: generated keys for dnssec 1/2
   shell: 'dnssec-keygen -a RSASHA256 -b 2048 -r /dev/urandom -n ZONE {{ item.item.key }}'
@@ -13,7 +12,6 @@
   with_items: '{{ st.results }}'
   when: item.stat is defined and not item.stat.exists
   register: stdout
-  tags: bind
 
 - name: move key file 1/2
   copy:
@@ -27,7 +25,6 @@
     - '{{ stdout.results }}'
     - ['key', 'private']
   when: not item[0].skipped is defined
-  tags: bind
 
 - name: link key file 1/2
   file:
@@ -40,7 +37,6 @@
     - '{{ stdout.results }}'
     - ['key', 'private']
   when: not item[0].skipped is defined
-  tags: bind
 
 - name: remove old key file 1/2
   file:
@@ -50,7 +46,6 @@
     - '{{ stdout.results }}'
     - ['key', 'private']
   when: not item[0].skipped is defined
-  tags: bind
 
 - name: generated keys for dnssec 2/2
   shell: 'dnssec-keygen -f KSK -a RSASHA256 -b 4096 -r /dev/urandom -n ZONE {{ item.item.key }}'
@@ -59,7 +54,6 @@
   with_items: '{{ st.results }}'
   when: item.stat is defined and not item.stat.exists
   register: stdout
-  tags: bind
 
 - name: move key file 2/2
   copy:
@@ -73,7 +67,6 @@
     - '{{ stdout.results }}'
     - ['key', 'private']
   when: not item[0].skipped is defined
-  tags: bind
 
 - name: link key file 2/2
   file:
@@ -86,7 +79,6 @@
     - '{{ stdout.results }}'
     - ['key', 'private']
   when: not item[0].skipped is defined
-  tags: bind
 
 - name: remove old key file 2/2
   file:
@@ -96,4 +88,3 @@
     - '{{ stdout.results }}'
     - ['key', 'private']
   when: not item[0].skipped is defined
-  tags: bind

@@ -1,0 +1,45 @@
+- name: install packages for bind9
+  apt:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - bind9
+    - bind9-host
+    - cron
+
+- name: create zone directory
+  file:
+    path: /etc/bind/zones
+    owner: bind
+    group: bind
+    mode: 0700
+    state: directory
+
+- name: create log directory
+  file:
+    path: /var/log/named
+    owner: bind
+    group: bind
+    mode: 0700
+    state: directory
+
+- name: copy bind configuration files
+  template:
+    src: '{{ item }}.j2'
+    dest: '/etc/bind/{{ item }}'
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - named.conf
+    - named.conf.options
+    - named.conf.local
+  notify: restart bind
+
+- name: create keys directory
+  file:
+    path: /etc/bind/keys
+    owner: root
+    group: bind
+    mode: 0750
+    state: directory
