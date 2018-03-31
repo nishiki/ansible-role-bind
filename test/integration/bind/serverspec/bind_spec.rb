@@ -17,16 +17,34 @@ puts '================================'
 end
 
 %w[
-  db.test.local
-  db.test.local.signed
-  db.hello.local
-].each do |file|
-  describe file("/etc/bind/zones/#{file}") do
+  test.local
+  hello.local
+  disabled.local
+].each do |zone|
+  describe file("/etc/bind/zones/#{zone}") do
+    it { should be_directory }
+    it { should be_mode 755 }
+    it { should be_owned_by 'bind' }
+    it { should be_grouped_into 'bind' }
+  end
+
+  describe file("/etc/bind/zones/#{zone}/db") do
     it { should be_file }
     it { should be_mode 644 }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
   end
+end
+
+describe file('/etc/bind/zones/test.local/db.signed') do
+  it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by 'root' }
+  it { should be_grouped_into 'root' }
+end
+
+describe file('/etc/bind/zones/absent.local') do
+  it { should_not exist }
 end
 
 describe file('/etc/bind/named.conf.local') do

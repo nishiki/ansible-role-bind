@@ -1,12 +1,13 @@
 # {{ ansible_managed }}
 {% for zone, value in bind_zones.iteritems() %}
+{% if 'state' not in value or value.state|lower not in ['disabled', 'absent'] %}
 
 zone "{{ zone }}" IN {
   type master;
 {% if 'dnssec' in value and value.dnssec %}
-  file "/etc/bind/zones/db.{{ zone }}.signed";
+  file "/etc/bind/zones/{{ zone }}/db.signed";
 {% else %}
-  file "/etc/bind/zones/db.{{ zone }}";
+  file "/etc/bind/zones/{{ zone }}/db";
 {% endif %}
 {% if 'allow_transfer' in value and value.dnssec %}
   allow-transfer {
@@ -21,4 +22,5 @@ zone "{{ zone }}" IN {
 {% endfor %}
 {% endif %}
 };
+{% endif %}
 {% endfor %}

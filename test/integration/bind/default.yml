@@ -38,6 +38,26 @@
           - { name: '@', type: ns, value: localhost. }
           - { name: '@', type: txt,  value: RFufr9qzCi9vnJeWUB2FMNDCtu8ZtP6WE2jl2OFvIiz6pv2dwfzEXBgTC8SI1UzsmlkFYS7vxkHeYuOCLQ95BkOl0YP85ejQQlz8DNbcMcUdAoDtmlaZ9jeXnU7RgCXs5F9ggsmM9B6mFMhZWo1lzwsX86UAR5nw7rIO3cbGo9oUcMTShVFDkTPnoNhP7MTE0L4M99yv8ZLptmS2GP6goHXZgTdFIyYCdfziQgoENcloUI3KshDscsoh6H6I2LA }
           - { name: hello, type: a, value: 4.3.2.1 }
+      disabled.local:
+        ns_primary: ns1.disabled.local
+        mail: root@disabled.local
+        serial: 2017092201
+        dnssec: no
+        state: disabled
+        records:
+          - { name: '@', type: mx, priority: 20, value: mail.test.local. }
+      absent.local:
+        ns_primary: ns1.absent.local
+        mail: root@absent.local
+        serial: 2017092201
+        dnssec: no
+        state: absent
+        records:
+          - { name: '@', type: mx, priority: 20, value: mail.test.local. }
+
+
+
+
 
   roles:
     - ansible-role-bind

@@ -1,18 +1,44 @@
+- name: create zone folder
+  file:
+    path: '/etc/bind/zones/{{ item.key }}'
+    owner: bind
+    group: bind
+    mode: 0755
+    state: directory
+  with_dict: '{{ bind_zones }}'
+  when: item.value.state is not defined or item.value.state != 'absent'
+
 - name: copy zone files
   template:
     src: db.j2
-    dest: '/etc/bind/zones/db.{{ item.key }}'
+    dest: '/etc/bind/zones/{{ item.key }}/db'
     owner: root
     group: root
     mode: 0644
   with_dict: '{{ bind_zones }}'
   register: zone
+  when: item.value.state is not defined or item.value.state != 'absent'
   notify: reload bind
 
 - name: dnssec sign
-  shell: 'dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ item.item.key }} -t /etc/bind/zones/db.{{ item.item.key }}'
+  shell: 'dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ item.item.key }} -t /etc/bind/zones/{{ item.item.key }}/db'
   args:
     chdir: /etc/bind/keys
   with_items: '{{ zone.results }}'
   when: item.changed and item.item.value.dnssec is defined and item.item.value.dnssec
   notify: reload bind
+
+- name: get zones files
+  find:
+    path: /etc/bind/zones
+    file_type: directory
+    recurse: no
+  register: zone_folders
+
+- name: delete old zone file
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  with_items: '{{ zone_folders.files }}'
+  when: item.path|basename not in bind_zones or ('state' in bind_zones[item.path|basename] and bind_zones[item.path|basename].state == 'absent')
+
