@@ -58,6 +58,7 @@ bind_zones:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, ttl: 5m, value: 1.2.3.4 }
       - { name: hello, type: caa, flag: 0, tag: issue, value: letsencrypt.org }
+      - { name: hello, type: srv, priority: 0, weight: 5, port: 80, value: www }
   hello.local:
     ns_primary: ns1.hello.local
     mail: root@hello.local

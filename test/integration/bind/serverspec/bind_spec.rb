@@ -87,6 +87,11 @@ describe command('dig +nocmd +noall +answer -t mx test.local @127.0.0.1') do
   its(:stdout) { should contain(/test\.local\.\s+3600\s+IN\s+MX\s+20 mail\.test\.local\./) }
 end
 
+describe command('dig +nocmd +noall +answer -t srv hello.test.local @127.0.0.1') do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should contain(/hello\.test\.local\.\s+3600\s+IN\s+SRV\s+0\s+5\s+80\s+www\.test\.local\.$/) }
+end
+
 describe command('dig +nocmd +noall +answer -t caa hello.test.local @127.0.0.1') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should contain(/hello\.test\.local\.\s+3600\s+IN\s+CAA\s+0 issue "letsencrypt\.org"/) }

@@ -12,6 +12,8 @@ $TTL    {{ item.value.ttl|default(3600) }}
 {% for record in item.value.records %}
 {% if record.type|upper == 'MX' %}
 {{ record.name }} {{ record.ttl|default(' ') }} IN MX {{ record.priority }} {{ record.value }}
+{% elif record.type|upper == 'SRV' %}
+{{ record.name }} {{ record.ttl|default(' ') }} IN SRV {{ record.priority }} {{ record.weight }} {{ record.port }} {{ record.value }}
 {% elif record.type|upper == 'CAA' %}
 {{ record.name }} {{ record.ttl|default(' ') }} CAA {{ record.flag }} {{ record.tag }} "{{ record.value }}"
 {% elif record.type|upper == 'TXT' %}
