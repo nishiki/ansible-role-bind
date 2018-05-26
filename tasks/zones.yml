@@ -41,4 +41,3 @@
     state: absent
   with_items: '{{ zone_folders.files }}'
   when: item.path|basename not in bind_zones or ('state' in bind_zones[item.path|basename] and bind_zones[item.path|basename].state == 'absent')
-

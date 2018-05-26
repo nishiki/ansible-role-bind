@@ -7,7 +7,7 @@
 
 - include: zones.yml
   tags: bind
-  
+
 - name: enable and start bind9
   service:
     name: bind9
