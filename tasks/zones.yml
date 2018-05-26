@@ -1,3 +1,8 @@
+- set_fact:
+    bind_zones_play: '{{ bind_zones_play|default([]) + [ item ] }}'
+  with_dict: '{{ bind_zones }}'
+  when: (item.value.state is not defined or item.value.state != 'absent') and (bind_zones_subset is not defined or item.key in bind_zones_subset)
+
 - name: create zone folder
   file:
     path: '/etc/bind/zones/{{ item.key }}'
@@ -5,8 +10,7 @@
     group: bind
     mode: 0755
     state: directory
-  with_dict: '{{ bind_zones }}'
-  when: item.value.state is not defined or item.value.state != 'absent'
+  with_items: '{{ bind_zones_play }}'
 
 - name: copy zone files
   template:
@@ -15,9 +19,8 @@
     owner: root
     group: root
     mode: 0644
-  with_dict: '{{ bind_zones }}'
+  with_items: '{{ bind_zones_play }}'
   register: zone
-  when: item.value.state is not defined or item.value.state != 'absent'
   notify: reload bind
 
 - name: dnssec sign

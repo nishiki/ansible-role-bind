@@ -25,3 +25,8 @@ platforms:
 
 suites:
   - name: bind
+  - name: bind-zones-subset
+    provisioner:
+      extra_vars:
+        bind_zones_subset:
+          - test.local

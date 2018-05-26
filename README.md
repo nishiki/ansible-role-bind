@@ -22,6 +22,7 @@ This role can work on Debian derived OS, but it's not our priority.
 * `bind_role` - the role `master` or `slave`, don't generate dnssec key on `slave`
 * `bind_options` - hash general bind options
 * `bind_zones` - the dns zones
+* `bind_zones_subset` array to use in `extra-vars` with the list zones to update
 * `bind_listen_ipv4` - enable or disable ip v4 support (default: true)
 * `bind_listen_ipv6` - enable or disable ip v6 support (default: true)
 
