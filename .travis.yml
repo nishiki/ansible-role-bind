@@ -13,12 +13,12 @@ before_install:
   - bundle install
 
 script:
-  - kitchen conv bind
-  - kitchen conv bind | grep changed=0
-  - kitchen verify bind
-  - kitchen conv bind-zones-subset
-  - kitchen conv bind-zones-subset | grep changed=0
-  - kitchen verify bind-zones-subset
+  - kitchen conv bind-debian-9
+  - kitchen conv bind-debian-9 | grep changed=0
+  - kitchen verify bind-debian-9
+  - kitchen conv bind-zones-subset-debian-9
+  - kitchen conv bind-zones-subset-debian-9 | grep changed=0
+  - kitchen verify bind-zones-subset-debian-9
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
