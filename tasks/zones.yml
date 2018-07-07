@@ -1,8 +1,3 @@
-- set_fact:
-    bind_zones_play: '{{ bind_zones_play|default([]) + [ item ] }}'
-  with_dict: '{{ bind_zones }}'
-  when: (item.value.state is not defined or item.value.state != 'absent') and (bind_zones_subset is not defined or item.key in bind_zones_subset)
-
 - name: create zone folder
   file:
     path: '/etc/bind/zones/{{ item.key }}'
@@ -10,7 +5,8 @@
     group: bind
     mode: 0755
     state: directory
-  with_items: '{{ bind_zones_play }}'
+  with_dict: '{{ bind_zones }}'
+  when: item.value.state is not defined or item.value.state != 'absent'
 
 - name: copy zone files
   template:
@@ -19,8 +15,31 @@
     owner: root
     group: root
     mode: 0644
-  with_items: '{{ bind_zones_play }}'
+  with_dict: '{{ bind_zones }}'
   register: zone
+  when: item.value.state is not defined or item.value.state != 'absent'
+  notify: reload bind
+
+- name: create reverse zone folder
+  file:
+    path: '/etc/bind/zones/{{ item.key }}'
+    owner: bind
+    group: bind
+    mode: 0755
+    state: directory
+  with_dict: '{{ bind_reverse_zones }}'
+  when: item.value.state is not defined or item.value.state != 'absent'
+
+- name: copy reverse zone files
+  template:
+    src: db-reverse.j2
+    dest: '/etc/bind/zones/{{ item.key }}/db'
+    owner: root
+    group: root
+    mode: 0644
+  with_dict: '{{ bind_reverse_zones }}'
+  register: zone
+  when: item.value.state is not defined or item.value.state != 'absent'
   notify: reload bind
 
 - name: dnssec sign
@@ -44,3 +63,10 @@
     state: absent
   with_items: '{{ zone_folders.files }}'
   when: item.path|basename not in bind_zones or ('state' in bind_zones[item.path|basename] and bind_zones[item.path|basename].state == 'absent')
+
+- name: delete old reverse zone file
+  file:
+    path: '{{ item.path }}'
+    state: absent
+  with_items: '{{ zone_folders.files }}'
+  when: item.path|basename not in bind_reverse_zones or ('state' in bind_reverse_zones[item.path|basename] and bind_reverse_zones[item.path|basename].state == 'absent')
