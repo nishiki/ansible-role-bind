@@ -1,0 +1,17 @@
+; {{ ansible_managed }}
+
+$ORIGIN {{ item.value.key }}
+$TTL    {{ item.value.ttl|default(3600) }}
+@       IN      SOA    {{ item.value.ns_primary }}. {{ item.value.mail|replace('@', '.') }}. (
+  {{ item.value.serial }} ; Serial
+  {{ item.value.refresh|default(14400) }} ; Refresh
+  {{ item.value.retry|default(86400) }} ; Retry
+  {{ item.value.expire|default(2419200) }} ; Expire
+  {{ item.value.negative_cache|default(86400) }} ; Negative Cache TTL
+)
+
+{% for record in item.value.records %}
+{{ record.name }} {{ record.ttl|default(' ') }} IN {{ record.type|upper }} {{ record.value }}
+{% endfor %}
+
+{% endif %}

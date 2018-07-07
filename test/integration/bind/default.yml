@@ -5,6 +5,24 @@
     bind_role: master
     bind_options:
       server-id: '"1"'
+    bind_reverse_zones:
+      3.2.1.in-addr.arpa:
+        ns_primary: ns1.test.local
+        mail: root@test.local
+        serial: 2017092202
+        ttl: 3600
+        refresh: 14400
+        retry: 86400
+        expire: 2419200
+        negative_cache: 86400
+        dnssec: yes
+        options:
+          auto-dnssec: maintain
+          inline-signing: yes
+          key-directory: '"/etc/bind/keys"'
+        records:
+          - { name: '@', type: ns, value: localhost. }
+          - { name: '4', type: ptr, value: hello.test.local }
     bind_zones:
       test.local:
         allow_transfer:

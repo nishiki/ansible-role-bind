@@ -5,6 +5,13 @@
   when: item.value.dnssec is defined and item.value.dnssec
   register: st
 
+- name: check if key has been generated for reverse zones
+  stat:
+    path: '/etc/bind/keys/{{ item.key }}-ksk.key'
+  with_dict: '{{ bind_reverse_zones }}'
+  when: item.value.dnssec is defined and item.value.dnssec
+  register: st
+
 - name: generated keys for dnssec 1/2
   shell: 'dnssec-keygen -a RSASHA256 -b 2048 -r /dev/urandom -n ZONE {{ item.item.key }}'
   args:

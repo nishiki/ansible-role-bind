@@ -1,4 +1,30 @@
 # {{ ansible_managed }}
+{% for zone, value in bind_reverse_zones.iteritems() %}
+{% if 'state' not in value or value.state|lower not in ['disabled', 'absent'] %}
+
+zone "{{ zone }}" IN {
+  type master;
+{% if 'dnssec' in value and value.dnssec %}
+  file "/etc/bind/zones/{{ zone }}/db.signed";
+{% else %}
+  file "/etc/bind/zones/{{ zone }}/db";
+{% endif %}
+{% if 'allow_transfer' in value and value.dnssec %}
+  allow-transfer {
+{% for ip in value.allow_transfer %}
+    {{ ip }};
+{% endfor %}
+  };
+{% endif %}
+{% if 'options' in value %}
+{% for option,  opt_value in value.options.iteritems() %}
+  {{ option }} {% if opt_value == True %}yes{% elif opt_value == False %}no{% else %}{{ opt_value }}{% endif %};
+{% endfor %}
+{% endif %}
+};
+{% endif %}
+{% endfor %}
+
 {% for zone, value in bind_zones.iteritems() %}
 {% if 'state' not in value or value.state|lower not in ['disabled', 'absent'] %}
 
