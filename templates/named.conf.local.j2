@@ -9,13 +9,15 @@ zone "{{ zone }}" IN {
 {% else %}
   file "/etc/bind/zones/{{ zone }}/db";
 {% endif %}
-{% if 'allow_transfer' in value and value.dnssec %}
   allow-transfer {
+{% if 'allow_transfer' in value and value.dnssec %}
 {% for ip in value.allow_transfer %}
     {{ ip }};
 {% endfor %}
-  };
+{% else %}
+    "none";
 {% endif %}
+  };
 {% if 'options' in value %}
 {% for option,  opt_value in value.options.iteritems() %}
   {{ option }} {% if opt_value == True %}yes{% elif opt_value == False %}no{% else %}{{ opt_value }}{% endif %};
