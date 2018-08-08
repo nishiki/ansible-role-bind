@@ -43,3 +43,12 @@
     group: bind
     mode: 0750
     state: directory
+
+- name: add cron dnssec
+  template:
+    src: dnssec.j2
+    dest: /etc/cron.weekly/dnssec
+    owner: root
+    group: root
+    mode: 0700
+  tags: bind
