@@ -8,16 +8,15 @@ provisioner:
   name: ansible_playbook
   hosts: localhost
   require_ansible_repo: false
-  require_ansible_omnibus: true
+  require_ansible_omnibus: false
   require_chef_for_busser: true
   ansible_verbose: false
-  ansible_version: <% if ENV['ANSIBLE_VERSION'] %><%= ENV['ANSIBLE_VERSION'] %><% else %><%= '2.2.3.0' %><% end %>
   ansible_inventory: ./test/integration/inventory
 
 platforms:
   - name: debian-9
     driver_config:
-      image: nishiki/ansible:stretch
+      image: nishiki/debian9:ansible-<%= ENV['ANSIBLE_VERSION'] ? ENV['ANSIBLE_VERSION'] : '2.6' %>
       command: /bin/systemd
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro

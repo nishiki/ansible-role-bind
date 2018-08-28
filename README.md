@@ -7,15 +7,9 @@ Install and configure bind with dnssec
 
 ## Requirements
 
- * bind version >= 9.8
-
-## Official support OS
-
-* Debian
-  * stretch
-  * jessie
-
-This role can work on Debian derived OS, but it's not our priority.
+* Ansible >= 2.4
+* bind version >= 9.8
+* Debian Stretch
 
 ## Role variables
 

@@ -2,10 +2,9 @@ sudo: required
 language: ruby
 
 env:
-  - ANSIBLE_VERSION=2.2.3.0
-  - ANSIBLE_VERSION=2.3.3.0
-  - ANSIBLE_VERSION=2.4.3.0
-  - ANSIBLE_VERSION=2.5.0.0
+  - ANSIBLE_VERSION=2.4
+  - ANSIBLE_VERSION=2.5
+  - ANSIBLE_VERSION=2.6
 services:
   - docker
 
