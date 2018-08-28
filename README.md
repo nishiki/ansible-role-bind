@@ -23,17 +23,20 @@ Install and configure bind with dnssec
 ## How to use
 
 * `host_vars/dns-master`
- ```
- bind_role: master
- ```
+
+```
+bind_role: master
+```
 
 * `host_vars/dns-slave`
- ```
- bind_role: slave
- ```
+
+```
+bind_role: slave
+```
 
 * `group_vars/dns-server`
- ```
+
+```
 bind_listen_ipv6: true
 bind_listen_ipv4: true
 bind_options:
@@ -63,7 +66,7 @@ bind_zones:
     records:
       - { name: '@', type: ns, value: localhost. }
       - { name: hello, type: a, value: 4.3.2.1 }
- ```
+```
 
 * playbook
 
