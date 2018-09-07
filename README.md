@@ -1,7 +1,7 @@
 # Ansible role: Bind
-[![Version](https://img.shields.io/badge/latest_version-1.2.1-green.svg)](https://github.com/nishiki/ansible-role-bind/releases)
+[![Version](https://img.shields.io/badge/latest_version-1.2.1-green.svg)](https://git.yaegashi.fr/nishiki/ansible-role-bind/releases)
 [![Build Status](https://travis-ci.org/nishiki/ansible-role-bind.svg?branch=master)](https://travis-ci.org/nishiki/ansible-role-bind)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/nishiki/ansible-role-bind/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://git.yaegashi.fr/nishiki/ansible-role-bind/src/branch/master/LICENSE)
 
 Install and configure bind with dnssec
 
