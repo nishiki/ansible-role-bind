@@ -115,3 +115,8 @@ describe command('dig +nocmd +noall +answer -t txt hello.local @127.0.0.1') do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should contain('"0L4M99yv8ZLptmS2GP6goHXZgTdFIyYCdfziQgoENcloUI3KshDscsoh6H6I2LA"') }
 end
+
+describe command('/etc/cron.weekly/dnssec') do
+  its(:exit_status) { should eq 0 }
+  its(:stderr) { should_not contain('dnssec-signzone: fatal') }
+end
