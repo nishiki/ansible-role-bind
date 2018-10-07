@@ -3,3 +3,4 @@ bind_role: master
 bind_listen_ipv4: true
 bind_listen_ipv6: true
 bind_options: {}
+bind_dnssec: {}

@@ -26,8 +26,9 @@ $TTL    {{ item.value.ttl|default(3600) }}
 {{ record.name }} {{ record.ttl|default(' ') }} IN {{ record.type|upper }} {{ record.value }}
 {% endif %}
 {% endfor %}
-{% if 'dnssec' in item.value and item.value.dnssec %}
+{% if item.key in bind_dnssec %}
 
-$INCLUDE {{ item.key }}.key
-$INCLUDE {{ item.key }}-ksk.key
+{% for key_type, key_values in bind_dnssec[item.key].iteritems() %}
+$INCLUDE K{{ item.key }}.+{{ "00{}".format(key_values.algorithm)[-3:] }}+{{ key_values.tag }}.key
+{% endfor %}
 {% endif %}

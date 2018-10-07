@@ -12,6 +12,7 @@ provisioner:
   require_chef_for_busser: true
   ansible_verbose: false
   ansible_inventory: ./test/integration/inventory
+  ansible_vault_password_file: ./test/integration/vault
 
 platforms:
   - name: debian-9

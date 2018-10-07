@@ -1,90 +1,23 @@
-- name: check if key has been generated
-  stat:
-    path: '/etc/bind/keys/{{ item.key }}-ksk.key'
-  with_dict: '{{ bind_zones }}'
-  when: item.value.dnssec is defined and item.value.dnssec
-  register: st
-
-- name: generated keys for dnssec 1/2
-  shell: 'dnssec-keygen -a RSASHA256 -b 2048 -r /dev/urandom -n ZONE {{ item.item.key }}'
-  args:
-    chdir: /tmp
-  with_items: '{{ st.results }}'
-  when: item.stat is defined and not item.stat.exists
-  register: stdout
-
-- name: move key file 1/2
+- name: copy private key
   copy:
-    remote_src: true
-    src: '/tmp/{{ item[0].stdout }}.{{ item[1] }}'
-    dest: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
+    dest: '/etc/bind/keys/K{{ item.0 }}.+{{ "00{}".format(bind_dnssec[item.0][item.1].algorithm)[-3:] }}+{{ bind_dnssec[item.0][item.1].tag }}.private'
+    content: '{{ bind_dnssec[item.0][item.1].private_key }}'
     owner: root
     group: bind
     mode: 0640
+#  no_log: true
   with_nested:
-    - '{{ stdout.results }}'
-    - ['key', 'private']
-  when: not item[0].skipped is defined
+    - '{{ bind_dnssec }}'
+    - [ 'ksk', 'zsk' ]
 
-- name: link key file 1/2
-  file:
-    src: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
-    dest: '/etc/bind/keys/{{ item[0].item.item.key }}.{{ item[1] }}'
-    owner: root
-    group: root
-    state: link
-  with_nested:
-    - '{{ stdout.results }}'
-    - ['key', 'private']
-  when: not item[0].skipped is defined
-
-- name: remove old key file 1/2
-  file:
-    path: '{{ item[0].stdout }}.{{ item[1] }}'
-    state: absent
-  with_nested:
-    - '{{ stdout.results }}'
-    - ['key', 'private']
-  when: not item[0].skipped is defined
-
-- name: generated keys for dnssec 2/2
-  shell: 'dnssec-keygen -f KSK -a RSASHA256 -b 4096 -r /dev/urandom -n ZONE {{ item.item.key }}'
-  args:
-    chdir: /tmp
-  with_items: '{{ st.results }}'
-  when: item.stat is defined and not item.stat.exists
-  register: stdout
-
-- name: move key file 2/2
-  copy:
-    remote_src: true
-    src: '/tmp/{{ item[0].stdout }}.{{ item[1] }}'
-    dest: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
+- name: copy public key
+  template:
+    src: public.key.j2
+    dest: '/etc/bind/keys/K{{ item.0 }}.+{{ "00{}".format(bind_dnssec[item.0][item.1].algorithm)[-3:] }}+{{ bind_dnssec[item.0][item.1].tag }}.key'
     owner: root
     group: bind
     mode: 0640
+#  no_log: true
   with_nested:
-    - '{{ stdout.results }}'
-    - ['key', 'private']
-  when: not item[0].skipped is defined
-
-- name: link key file 2/2
-  file:
-    src: '/etc/bind/keys/{{ item[0].stdout }}.{{ item[1] }}'
-    dest: '/etc/bind/keys/{{ item[0].item.item.key }}-ksk.{{ item[1] }}'
-    owner: root
-    group: root
-    state: link
-  with_nested:
-    - '{{ stdout.results }}'
-    - ['key', 'private']
-  when: not item[0].skipped is defined
-
-- name: remove old key file 2/2
-  file:
-    path: '{{ item[0].stdout }}.{{ item[1] }}'
-    state: absent
-  with_nested:
-    - '{{ stdout.results }}'
-    - ['key', 'private']
-  when: not item[0].skipped is defined
+    - '{{ bind_dnssec }}'
+    - [ 'ksk', 'zsk' ]

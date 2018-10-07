@@ -3,10 +3,8 @@
 
 cd /etc/bind/keys
 
-{% for zone, value in bind_zones.iteritems() %}
-{% if 'dnssec' in value and value.dnssec %}
+{% for zone  in bind_dnssec %}
 dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ zone }} -t /etc/bind/zones/{{ zone }}/db
-{% endif %}
 {% endfor %}
 
 systemctl reload bind9

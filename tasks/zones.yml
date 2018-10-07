@@ -28,7 +28,7 @@
   args:
     chdir: /etc/bind/keys
   with_items: '{{ zone.results }}'
-  when: item.changed and item.item.value.dnssec is defined and item.item.value.dnssec
+  when: item.changed and item.item.key in bind_dnssec
   notify: reload bind
 
 - name: get zones files

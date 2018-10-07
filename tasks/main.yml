@@ -2,7 +2,6 @@
   tags: bind
 
 - include: keys.yml
-  when: bind_role == 'master'
   tags: bind
 
 - include: zones.yml
