@@ -10,6 +10,9 @@ services:
 
 before_install:
   - bundle install
+  - sudo pip install --upgrade pip
+  - sudo pip install ansible-lint
+  - git clone https://github.com/ansible/galaxy-lint-rules.git
 
 script:
   - kitchen conv bind-debian-9
@@ -18,6 +21,7 @@ script:
   - kitchen conv bind-zones-subset-debian-9
   - kitchen conv bind-zones-subset-debian-9 | grep changed=0
   - kitchen verify bind-zones-subset-debian-9
+  - ansible-lint -r galaxy-lint-rules/rules .
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
