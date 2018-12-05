@@ -1,6 +1,6 @@
 - set_fact:
     bind_zones_play: '{{ bind_zones_play|default([]) + [ item ] }}'
-  with_dict: '{{ bind_zones }}'
+  loop: '{{ bind_zones|dict2items }}'
   when: (item.value.state is not defined or item.value.state != 'absent') and (bind_zones_subset is not defined or item.key in bind_zones_subset)
 
 - name: create zone folder
@@ -10,7 +10,7 @@
     group: bind
     mode: 0755
     state: directory
-  with_items: '{{ bind_zones_play }}'
+  loop: '{{ bind_zones_play }}'
 
 - name: copy zone files
   template:
@@ -19,7 +19,7 @@
     owner: root
     group: root
     mode: 0644
-  with_items: '{{ bind_zones_play }}'
+  loop: '{{ bind_zones_play }}'
   register: zone
   notify: reload bind
 
@@ -27,7 +27,7 @@
   shell: 'dnssec-signzone -3 $(head -n 1000 /dev/urandom | sha1sum | cut -b 1-16) -A -N INCREMENT -o {{ item.item.key }} -t /etc/bind/zones/{{ item.item.key }}/db'
   args:
     chdir: /etc/bind/keys
-  with_items: '{{ zone.results }}'
+  loop: '{{ zone.results }}'
   when: item.changed and item.item.key in bind_dnssec
   notify: reload bind
 
@@ -42,5 +42,5 @@
   file:
     path: '{{ item.path }}'
     state: absent
-  with_items: '{{ zone_folders.files }}'
+  loop: '{{ zone_folders.files }}'
   when: item.path|basename not in bind_zones or ('state' in bind_zones[item.path|basename] and bind_zones[item.path|basename].state == 'absent')

@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+- break: change with_items to loop
 
 ## v1.2.2 (2018-09-07)
 - fix: remove a bug in dnssec cron

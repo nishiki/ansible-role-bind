@@ -5,10 +5,12 @@
     owner: root
     group: bind
     mode: 0640
-#  no_log: true
-  with_nested:
-    - '{{ bind_dnssec }}'
-    - [ 'ksk', 'zsk' ]
+  no_log: true
+  loop: '{{ bind_dnssec|product(file_ext)|list }}'
+  vars:
+    file_ext:
+      - ksk
+      - zsk
 
 - name: copy public key
   template:
@@ -17,7 +19,9 @@
     owner: root
     group: bind
     mode: 0640
-#  no_log: true
-  with_nested:
-    - '{{ bind_dnssec }}'
-    - [ 'ksk', 'zsk' ]
+  no_log: true
+  loop: '{{ bind_dnssec|product(file_ext)|list }}'
+  vars:
+    file_ext:
+      - ksk
+      - zsk
