@@ -1,3 +1,4 @@
+---
 - name: install packages for bind9
   apt:
     name: '{{ packages }}'
@@ -7,6 +8,10 @@
       - bind9
       - bind9-host
       - cron
+  register: result
+  retries: 3
+  delay: 1
+  until: result is success
 
 - name: create zone directory
   file:
