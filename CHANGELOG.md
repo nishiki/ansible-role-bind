@@ -5,6 +5,8 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 - break: change with_items to loop
+- break: remove support ansible < 2.6
+- test: add test with ansible 2.7
 - test: add ansible-lint
 
 ## v1.2.2 (2018-09-07)

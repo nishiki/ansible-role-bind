@@ -18,7 +18,7 @@ provisioner:
 platforms:
   - name: debian-9
     driver_config:
-      image: "nishiki/debian9:ansible-<%= ENV['ANSIBLE_VERSION'] ? ENV['ANSIBLE_VERSION'] : '2.6' %>"
+      image: "nishiki/debian9:ansible-<%= ENV['ANSIBLE_VERSION'] ? ENV['ANSIBLE_VERSION'] : '2.7' %>"
       command: /bin/systemd
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
