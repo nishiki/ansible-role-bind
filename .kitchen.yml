@@ -16,13 +16,13 @@ provisioner:
   ansible_vault_password_file: ./test/integration/vault
 
 platforms:
-  - name: debian-9
+  - name: debian-10
     driver_config:
-      image: "nishiki/debian9:ansible-<%= ENV['ANSIBLE_VERSION'] ? ENV['ANSIBLE_VERSION'] : '2.7' %>"
+      image: "nishiki/debian10:ansible-<%= ENV['ANSIBLE_VERSION'] ? ENV['ANSIBLE_VERSION'] : '2.9' %>"
       command: /bin/systemd
       volume:
         - /sys/fs/cgroup:/sys/fs/cgroup:ro
-      security_opt: seccomp=unconfined
+      privileged: cap-add=SYS_ADMIN
 
 suites:
   - name: bind

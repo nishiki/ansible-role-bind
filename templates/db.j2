@@ -28,7 +28,7 @@ $TTL    {{ item.value.ttl|default(3600) }}
 {% endfor %}
 {% if item.key in bind_dnssec %}
 
-{% for key_type, key_values in bind_dnssec[item.key].iteritems() %}
+{% for key_type, key_values in bind_dnssec[item.key].items() %}
 $INCLUDE K{{ item.key }}.+{{ "00{}".format(key_values.algorithm)[-3:] }}+{{ key_values.tag }}.key
 {% endfor %}
 {% endif %}

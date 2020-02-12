@@ -4,8 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+- feat: add support debian 10
 - break: change with_items to loop
-- break: remove support ansible < 2.6
+- break: remove support ansible < 2.7
 - test: add test with ansible 2.7
 - test: add ansible-lint
 

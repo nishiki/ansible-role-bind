@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-{% for zone, value in bind_zones.iteritems() %}
+{% for zone, value in bind_zones.items() %}
 {% if 'state' not in value or value.state|lower not in ['disabled', 'absent'] %}
 
 zone "{{ zone }}" IN {
@@ -19,7 +19,7 @@ zone "{{ zone }}" IN {
 {% endif %}
   };
 {% if 'options' in value %}
-{% for option,  opt_value in value.options.iteritems() %}
+{% for option,  opt_value in value.options.items() %}
   {{ option }} {% if opt_value == True %}yes{% elif opt_value == False %}no{% else %}{{ opt_value }}{% endif %};
 {% endfor %}
 {% endif %}

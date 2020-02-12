@@ -7,9 +7,9 @@ Install and configure bind with dnssec
 
 ## Requirements
 
-* Ansible >= 2.6
+* Ansible >= 2.7
 * bind version >= 9.8
-* Debian Stretch
+* Debian Stretch and Buster
 
 ## Role variables
 
