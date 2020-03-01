@@ -1,27 +1,29 @@
 ---
 sudo: required
-language: ruby
+dist: bionic
+addons:
+  apt:
+    packages:
+      - python3
+      - python3-pip
+      - python3-setuptools
 
 env:
-  - ANSIBLE_VERSION=2.6
-  - ANSIBLE_VERSION=2.7
+  - ANSIBLE_VERSION=2.7.16
+  - ANSIBLE_VERSION=2.8.8
+  - ANSIBLE_VERSION=2.9.4
+
 services:
   - docker
 
 before_install:
-  - bundle install
-  - sudo pip install --upgrade pip
-  - sudo pip install ansible-lint
+  - sudo pip3 install ansible==${ANSIBLE_VERSION}
+  - sudo pip3 install molecule 'molecule[docker]' docker testinfra ansible-lint yamllint
   - git clone https://github.com/ansible/galaxy-lint-rules.git
 
 script:
-  - kitchen conv bind-debian-9
-  - kitchen conv bind-debian-9 | grep changed=0
-  - kitchen verify bind-debian-9
-  - kitchen conv bind-zones-subset-debian-9
-  - kitchen conv bind-zones-subset-debian-9 | grep changed=0
-  - kitchen verify bind-zones-subset-debian-9
-  - ansible-lint -r galaxy-lint-rules/rules .
+  - ansible --version
+  - molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

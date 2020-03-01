@@ -91,13 +91,13 @@ bind_dnssec:
 ```
 
 ## Development
-### Tests with docker
+
+### Test with molecule and docker
 
 * install [docker](https://docs.docker.com/engine/installation/)
-* install ruby
-* install bundler `gem install bundler`
-* install dependencies `bundle install`
-* run the tests `kitchen test`
+* install `python3` and `python3-pip`
+* install molecule and dependencies `pip3 install molecule 'molecule[docker]' docker ansible-lint testinfra yamllint`
+* run `molecule test`
 
 ## License
 

@@ -1,0 +1,17 @@
+---
+driver:
+  name: docker
+platforms:
+  - name: debian10
+    image: nishiki/debian10:molecule
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    command: /bin/systemd
+    capabilities:
+      - SYS_ADMIN
+verifier:
+  name: testinfra
+provisioner:
+  options:
+    vault-password-file: vault
