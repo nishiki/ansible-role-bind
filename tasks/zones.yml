@@ -3,6 +3,8 @@
   set_fact:
     bind_zones_play: '{{ bind_zones_play|default([]) + [ item ] }}'
   loop: '{{ bind_zones|dict2items }}'
+  loop_control:
+    label: '{{ item.key }}'
   when: >
     (item.value.state is not defined or item.value.state != 'absent')
     and (bind_zones_subset is not defined or item.key in bind_zones_subset)
@@ -14,6 +16,8 @@
     group: bind
     mode: 0755
     state: directory
+  loop_control:
+    label: '{{ item.key }}'
   loop: '{{ bind_zones_play }}'
 
 - name: copy zone files
@@ -24,6 +28,8 @@
     group: root
     mode: 0644
   loop: '{{ bind_zones_play }}'
+  loop_control:
+    label: '{{ item.key }}'
   register: zone
   notify: reload bind
 
@@ -34,6 +40,8 @@
   args:
     chdir: /etc/bind/keys
   loop: '{{ zone.results }}'
+  loop_control:
+    label: '{{ item.item.key }}'
   when: item.item.key in bind_dnssec and item.changed
   notify: reload bind
 
@@ -49,6 +57,8 @@
     path: '{{ item.path }}'
     state: absent
   loop: '{{ zone_folders.files }}'
+  loop_control:
+    label: '{{ item.path|basename }}'
   when: >
     item.path|basename not in bind_zones or
     ('state' in bind_zones[item.path|basename] and bind_zones[item.path|basename].state == 'absent')

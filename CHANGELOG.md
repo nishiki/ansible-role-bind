@@ -8,6 +8,7 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 ### Changed
 
 - test: replace kitchen to molecule
+- feat: use label in loop_control
 
 ## v1.3.0 (2020-02-12)
 - feat: add support debian 10
